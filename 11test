@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 50px;
+      background: #f5f5f5;
+    }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<h2 style="text-align:center;">Client Submission Form</h2>
+
+<form id="clientForm">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required>
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required>
+
+  <label for="appointment">Date & Time:</label>
+  <input type="datetime-local" id="appointment" name="appointment" required>
+
+  <label for="fileUpload">Upload File:</label>
+  <input type="file" id="fileUpload" name="fileUpload">
+
+  <label for="message">Message:</label>
+  <textarea id="message" name="message" rows="4"></textarea>
+
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  const form = document.getElementById('clientForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    // 如果你想直接上传文件到 n8n webhook，需要保证 webhook 支持 multipart/form-data
+    try {
+      const response = await fetch('WEBHOOK_URL', {  // 替换为你的 n8n webhook 地址
+        method: 'POST',
+        body: formData
+      });
+
+      if(response.ok){
+        alert('Form submitted successfully!');
+        form.reset();
+      } else {
+        alert('Error submitting form.');
+      }
+
+    } catch (err) {
+      alert('Network error: ' + err.message);
+    }
+  });
+</script>
+
+</body>
+</html>
